@@ -1,21 +1,19 @@
 ---
 version: 2.1
 
-orbs:
-  circle-agent: feedyard/circleci-agent-publish@0.1.0
+executors:
 
-workflows:
-  circleci-remote-docker-image-pipeline:
-    jobs:
-      - circle-agent/dev-release:
-          filters:
-            branches:
-              only: master
-            tags:
-              ignore: /.*/
-      - circle-agent/publish:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
+  remote-terminal:
+    docker:
+      - image: quay.io/feedyard/remote-terminal
+    
+jobs:
+  build:
+    executor: remote-terminal
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: greet
+          command: echo 'remote-terminal running...'
+ 
